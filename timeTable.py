@@ -19,7 +19,7 @@ class myThread (threading.Thread):
    def run(self):
       while not stopEvent.is_set():
          updateTimes()
-         stopEvent.wait(1)
+         stopEvent.wait(30)
      
    
 def exitButton():
@@ -36,6 +36,7 @@ def busButton():
       typesToShow.append('b')
       
    print typesToShow
+   updateTimes()
 
 def subwayButton():
    print "Test"
@@ -44,6 +45,8 @@ def subwayButton():
       typesToShow.remove('u')
    else:
       typesToShow.append('u')
+   
+   updateTimes()
       
 def sbahnButton():
    print "Test"
@@ -53,9 +56,12 @@ def sbahnButton():
    else:
       typesToShow.append('s')
 
+   updateTimes()
+
 def updateTimes():
 
    departures = mvg_api.get_departures(idStation)
+   departures = departures[:8]
 
    #Fill dialog with departures   
    print "Update Times..."   
@@ -64,7 +70,7 @@ def updateTimes():
    for departure in departures:
       
       #Get information from mvg_api
-      strDestination = departure['destination']
+      strDestination = departure['destination'][:17]
       strProduct = departure['product']
       strLabel = departure['label']
       strLineBackgroundColor = departure['lineBackgroundColor']
@@ -72,6 +78,7 @@ def updateTimes():
 
       strText = strProduct, strLabel, strDestination, strDepartureMin
       
+      #check, if current Product should be shown
       if strProduct in typesToShow:
          
          timeEntryDict = timeTableEntries[depNumber]
@@ -89,7 +96,7 @@ def updateTimes():
          depNumber += 1
 
 #Make it resizeable, when window is expanded
-top.grid_rowconfigure(0, weight=1)
+#top.grid_rowconfigure(0, weight=1)
 top.grid_columnconfigure(0, weight=1)
 
 #Define Frames
@@ -132,17 +139,17 @@ labelContent = []
 labels = []
 for i in range(30):
    varLine = StringVar()
-   varLine.set('L')
+   varLine.set('')
    labelLine = Label(labelFrame, textvariable=varLine, fg='white', font=("Arial", 12))
    labelLine.grid(row=i, column=0, sticky='we')
    
    varDestination = StringVar()
-   varDestination.set('D')
+   varDestination.set('')
    labelDestination = Label(labelFrame, textvariable=varDestination, font=("Arial", 12))
    labelDestination.grid(row=i, column=1, sticky='w')
    
    varTimeLeft = StringVar()
-   varTimeLeft.set('T')
+   varTimeLeft.set('')
    labelTimeLeft = Label(labelFrame, textvariable=varTimeLeft, font=("Arial", 12))
    labelTimeLeft.grid(row=i, column=2, sticky='we')
    
@@ -156,5 +163,5 @@ stopEvent = threading.Event()
 thread = myThread()
 thread.start()
 
-#top.attributes('-fullscreen', True)
+top.attributes('-fullscreen', True)
 top.mainloop()
