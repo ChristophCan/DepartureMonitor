@@ -105,26 +105,26 @@ top.grid_columnconfigure(0, weight=1)
 #busButton.pack(fill = X, expand=1)
 
 #Frame
-listFrame = Frame(top)
-listFrame.grid_columnconfigure(0, weight=1)
-listFrame.grid_rowconfigure(0, weight=1)
-listFrame.grid(row=0, column=0, sticky="nsew")
+#listFrame = Frame(top)
+#listFrame.grid_columnconfigure(0, weight=1)
+#listFrame.grid_rowconfigure(0, weight=1)
+#listFrame.grid(row=0, column=0, sticky="nsew")
 
 #Define Buttons
-b = Button(listFrame, text="Exit", command=exitButton)
+b = Button(top, text="Exit", command=exitButton)
 b.grid(row=0, column=0, columnspan=3, sticky='we')
 
-buttonBus = Button(listFrame, text="Bus", command=busButton)
+buttonBus = Button(top, text="Bus", command=busButton)
 buttonBus.grid(row=1, column=0, sticky='we')
 
-buttonSubway = Button(listFrame, text="U-Bahn", command=subwayButton)
+buttonSubway = Button(top, text="U-Bahn", command=subwayButton)
 buttonSubway.grid(row=1, column=1, sticky='we')
 
-buttonSBahn = Button(listFrame, text="S-Bahn", command=sbahnButton)
+buttonSBahn = Button(top, text="S-Bahn", command=sbahnButton)
 buttonSBahn.grid(row=1, column=2, sticky='we')
 
 #Define Frame to hold Labels for lines to whow
-labelFrame = Frame(listFrame)
+labelFrame = Frame(top)
 labelFrame.grid(row=2, column=0, columnspan=3, sticky='we')
 
 timeTableEntries = []
