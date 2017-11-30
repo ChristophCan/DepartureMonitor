@@ -61,39 +61,55 @@ def sbahnButton():
 def updateTimes():
 
    departures = mvg_api.get_departures(idStation)
-   departures = departures[:8]
-
+   
    #Fill dialog with departures   
    print "Update Times..."   
 
-   depNumber=0
+   #Only show departures of selected products
+   filteredDepartures=[]
    for departure in departures:
-      
-      #Get information from mvg_api
-      strDestination = departure['destination'][:17]
       strProduct = departure['product']
-      strLabel = departure['label']
-      strLineBackgroundColor = departure['lineBackgroundColor']
-      strDepartureMin = departure['departureTimeMinutes']
-
-      strText = strProduct, strLabel, strDestination, strDepartureMin
-      
-      #check, if current Product should be shown
       if strProduct in typesToShow:
+         filteredDepartures.append(departure)
+
+   #depIndex=0
+   #for departure in filteredDepartures:      
+   for depIndex in range(12):
+      
+      if depIndex<len(filteredDepartures):
+         departure = filteredDepartures[depIndex]
+      
+         #Get information from mvg_api
+         strDestination = departure['destination'][:17]
+         strProduct = departure['product']
+         strLabel = departure['label']
+         strLineBackgroundColor = departure['lineBackgroundColor']
+         strDepartureMin = departure['departureTimeMinutes']
+
+         strText = strProduct, strLabel, strDestination, strDepartureMin
+      
+      else:
+         strProduct=''
+         strLabel=''
+         strLineBackgroundColor='lightgrey'
+         strDestination=''
+         strDepartureMin=''
+      
+      #Write information in labels     
+      timeEntryDict = timeTableEntries[depIndex]
+      varLine = timeEntryDict['Line']
+      varLine.set(strProduct + strLabel)
+      labelLine = timeEntryDict['labelLine']
+      labelLine.config(bg=strLineBackgroundColor)
          
-         timeEntryDict = timeTableEntries[depNumber]
-         varLine = timeEntryDict['Line']
-         varLine.set(strProduct + strLabel)
-         labelLine = timeEntryDict['labelLine']
-         labelLine.config(bg=strLineBackgroundColor)
+      varDestination = timeEntryDict['Destination']
+      varDestination.set(strDestination)
          
-         varDestination = timeEntryDict['Destination']
-         varDestination.set(strDestination)
-         
-         varTimeLeft = timeEntryDict['TimeLeft']
-         varTimeLeft.set(strDepartureMin)          
-         
-         depNumber += 1
+      varTimeLeft = timeEntryDict['TimeLeft']
+      varTimeLeft.set(strDepartureMin)
+      
+      #depIndex+=1    
+  
 
 #Make it resizeable, when window is expanded
 #top.grid_rowconfigure(0, weight=1)
@@ -132,12 +148,13 @@ buttonSBahn.grid(row=1, column=2, sticky='we')
 
 #Define Frame to hold Labels for lines to whow
 labelFrame = Frame(top)
+labelFrame.grid_columnconfigure(1, weight=1)
 labelFrame.grid(row=2, column=0, columnspan=3, sticky='we')
 
 timeTableEntries = []
 labelContent = []
 labels = []
-for i in range(30):
+for i in range(20):
    varLine = StringVar()
    varLine.set('')
    labelLine = Label(labelFrame, textvariable=varLine, fg='white', font=("Arial", 12))
@@ -146,6 +163,7 @@ for i in range(30):
    varDestination = StringVar()
    varDestination.set('')
    labelDestination = Label(labelFrame, textvariable=varDestination, font=("Arial", 12))
+   #labelDestination.grid_columnconfigure(1, weight=1)
    labelDestination.grid(row=i, column=1, sticky='w')
    
    varTimeLeft = StringVar()
