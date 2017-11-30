@@ -93,10 +93,10 @@ top.grid_rowconfigure(0, weight=1)
 top.grid_columnconfigure(0, weight=1)
 
 #Define Frames
-typeFrame = Frame(top)
-typeFrame.grid_columnconfigure(0, weight=1)
-typeFrame.grid_rowconfigure(0, weight=1)
-typeFrame.grid(row=0, column=0, sticky="nsew")
+#typeFrame = Frame(top)
+#typeFrame.grid_columnconfigure(0, weight=1)
+#typeFrame.grid_rowconfigure(0, weight=1)
+#typeFrame.grid(row=0, column=0, sticky="nsew")
 
 #subwayButton = Button(typeFrame, text="U-Bahn")
 #subwayButton.pack(fill = X, expand=1)
